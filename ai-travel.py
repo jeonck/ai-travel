@@ -7,19 +7,25 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Initialize session state at the very beginning
+if 'stage' not in st.session_state:
+    st.session_state.stage = 1
+
 def initialize_session_state():
-    if 'stage' not in st.session_state:
-        st.session_state.stage = 1
-    if 'user_input' not in st.session_state:
-        st.session_state.user_input = ""
-    if 'recommendations' not in st.session_state:
-        st.session_state.recommendations = ""
-    if 'selected_destination' not in st.session_state:
-        st.session_state.selected_destination = ""
-    if 'itinerary' not in st.session_state:
-        st.session_state.itinerary = ""
-    if 'chat_history' not in st.session_state:
-        st.session_state.chat_history = []
+    """Initialize all session state variables"""
+    default_values = {
+        'stage': 1,
+        'user_input': "",
+        'recommendations': "",
+        'selected_destination': "",
+        'itinerary': "",
+        'chat_history': [],
+        'api_key': os.getenv("OPENAI_API_KEY", "")
+    }
+    
+    for key, value in default_values.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
 
 def validate_api_key():
     api_key = st.session_state.get('api_key', '')
